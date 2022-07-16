@@ -17,36 +17,25 @@
 
 FROM debian:10-slim AS builder
 
+ARG VERSION=
 ENV NO_LUA_JIT="s390x arm64"
-
-# TODO: make sure /source looks roughly the same from git or tar
 
 # Reusable layer for base update
 RUN apt-get update && apt-get -y dist-upgrade && apt-get clean
 
 # devscripts gives us mk-build-deps (and a lot of other stuff)
-RUN apt-get update && apt-get -y dist-upgrade && apt-get install -y  --no-install-recommends devscripts dpkg-dev equivs git python3-venv && apt-get clean
+RUN apt-get update && apt-get -y dist-upgrade && apt-get install -y --no-install-recommends devscripts dpkg-dev equivs git python3-venv wget && apt-get clean
 
-# import everything - this could be pdns.git OR an auth tarball!
-COPY builder-support /source/builder-support
-
-# TODO: control file is not in tarballs at all right now
-RUN mk-build-deps -i -t 'apt-get -y -o Debug::pkgProblemResolver=yes --no-install-recommends' /source/builder-support/debian/authoritative/debian-buster/control && \
-    apt-get clean
-
-# build and install (TODO: before we hit this line, rearrange /source structure if we are coming from a tarball)
 WORKDIR /source/
 
-COPY pdns /source/pdns
-COPY modules /source/modules
-COPY codedocs /source/codedocs
-COPY docs /source/docs
-COPY build-aux /source/build-aux
-COPY m4 /source/m4
-COPY ext /source/ext
-COPY .git /source/.git
-ADD configure.ac Makefile.am /source/
-COPY builder/helpers/set-configure-ac-version.sh /usr/local/bin
+# Get the source from github
+RUN wget https://github.com/PowerDNS/pdns/archive/refs/tags/${VERSION}.tar.gz && tar xvf ${VERSION}.tar.gz && mv pdns-${VERSION}/* . && rm ${VERSION}.tar.gz 
+
+# TODO: control file is not in tarballs at all right now
+RUN mk-build-deps -i -t 'apt-get -y -o Debug::pkgProblemResolver=yes --no-install-recommends' builder-support/debian/authoritative/debian-buster/control && \
+    apt-get clean
+
+RUN cp builder/helpers/set-configure-ac-version.sh /usr/local/bin
 
 ARG MAKEFLAGS=
 ENV MAKEFLAGS ${MAKEFLAGS:--j2}
@@ -66,7 +55,7 @@ RUN mkdir /build && \
       --with-lua=${LUAVER} \
       --sysconfdir=/etc/powerdns \
       --enable-option-checking=fatal \
-      --with-dynmodules='bind geoip gmysql godbc gpgsql gsqlite3 ldap lmdb lua2 pipe remote tinydns' \
+      --with-dynmodules='bind geoip gmysql ldap lmdb lua2 pipe remote tinydns' \
       --enable-tools \
       --enable-ixfrdist \
       --with-unixodbc-lib=/usr/lib/$(dpkg-architecture -q DEB_BUILD_GNU_TYPE) && \
@@ -74,6 +63,7 @@ RUN mkdir /build && \
     make $MAKEFLAGS -C ext && make $MAKEFLAGS -C modules && make $MAKEFLAGS -C pdns && \
     make -C pdns install DESTDIR=/build && make -C modules install DESTDIR=/build && make clean && \
     strip /build/usr/local/bin/* /build/usr/local/sbin/* /build/usr/local/lib/pdns/*.so
+
 RUN cd /tmp && mkdir /build/tmp/ && mkdir debian && \
     echo 'Source: docker-deps-for-pdns' > debian/control && \
     dpkg-shlibdeps /build/usr/local/bin/* /build/usr/local/sbin/* /build/usr/local/lib/pdns/*.so && \

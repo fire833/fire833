@@ -18,26 +18,25 @@
 # Builder
 FROM debian:10-slim AS builder
 
+ARG VERSION=
 ENV NO_LUA_JIT="s390x arm64"
 
 # Reusable layer for base update
 RUN apt-get update && apt-get -y dist-upgrade && apt-get clean
 
 # devscripts gives us mk-build-deps (and a lot of other stuff)
-RUN apt-get install -y --no-install-recommends devscripts equivs git curl && apt-get clean
+RUN apt-get install -y --no-install-recommends devscripts equivs git curl wget && apt-get clean
 
-COPY builder-support /source/builder-support
+WORKDIR /source/
+
+# Get the source from github
+RUN wget https://github.com/PowerDNS/pdns/archive/refs/tags/${VERSION}.tar.gz && tar xvf ${VERSION}.tar.gz && mv pdns-${VERSION}/* . && rm ${VERSION}.tar.gz 
 
 # TODO: control file is not in tarballs at all right now
 RUN mk-build-deps -i -t 'apt-get -y -o Debug::pkgProblemResolver=yes --no-install-recommends' /source/builder-support/debian/recursor/debian-buster/control && \
     apt-get clean
 
-COPY pdns /source/pdns
-COPY build-aux /source/build-aux
-COPY m4 /source/m4
-COPY ext /source/ext
-COPY .git /source/.git
-COPY builder/helpers/set-configure-ac-version.sh /usr/local/bin
+RUN cp builder/helpers/set-configure-ac-version.sh /usr/local/bin
 
 # build and install (TODO: before we hit this line, rearrange /source structure if we are coming from a tarball)
 WORKDIR /source/pdns/recursordist

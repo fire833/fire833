@@ -17,25 +17,23 @@
 
 # Tool lookup
 BUILDAH         =       $(shell which buildah)
-CURL            =       $(shell which curl)
-JQ              =       $(shell which jq)
 
 .PHONY: pdns-auth
 pdns-auth:
-    VERSION=$(shell ${CURL} https://api.github.com/repos/PowerDNS/pdns/releases/latest)
-
-    ${BUILDAH} bud --build-arg VERSION=${VERSION} dockerfiles/powerdns-auth/Dockerfile
+	@echo "Building PDNS Auth image..."
+	${BUILDAH} bud --build-arg VERSION=$(shell cat dockerfiles/powerdns-auth/Version) dockerfiles/powerdns-auth/Dockerfile
 
 .PHONY: pdns-recursor
 pdns_recursor:
-	VERSION=$(shell ${CURL} https://api.github.com/repos/PowerDNS/pdns/releases/latest)
-
-    ${BUILDAH} bud --build-arg VERSION=${VERSION} dockerfiles/powerdns-recursor/Dockerfile
+	@echo "Building PDNS Recursor image..."
+	${BUILDAH} bud --build-arg VERSION=$(shell cat dockerfiles/powerdns-recursor/Version) dockerfiles/powerdns-recursor/Dockerfile
 
 .PHONY: openvpn
 openvpn:
-	${BUILDAH} bud --build-arg VERSION=${VERSION} dockerfiles/openvpn/Dockerfile
+	@echo "Building OpenVPN image..."
+	${BUILDAH} bud --build-arg VERSION=$(shell cat dockerfiles/openvpn/Version) dockerfiles/openvpn/Dockerfile
 
 .PHONY: freeradius
 freeradius:
-	${BUILDAH} bud --build-arg VERSION=${VERSION} dockerfiles/freeradius/Dockerfile
+	@echo "Building FreeRADIUS image..."
+	${BUILDAH} bud --build-arg VERSION=$(shell cat dockerfiles/freeradius/Version) dockerfiles/freeradius/Dockerfile
