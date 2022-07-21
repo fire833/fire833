@@ -24,7 +24,7 @@ pdns-auth:
 	${BUILDAH} bud --build-arg VERSION=$(shell cat dockerfiles/powerdns-auth/Version) dockerfiles/powerdns-auth/Dockerfile
 
 .PHONY: pdns-recursor
-pdns_recursor:
+pdns-recursor:
 	@echo "Building PDNS Recursor image..."
 	${BUILDAH} bud --build-arg VERSION=$(shell cat dockerfiles/powerdns-recursor/Version) dockerfiles/powerdns-recursor/Dockerfile
 

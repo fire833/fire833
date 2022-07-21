@@ -16,7 +16,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 # Builder
-FROM debian:10-slim AS builder
+FROM docker.io/debian:10-slim AS builder
 
 ARG VERSION=
 ENV NO_LUA_JIT="s390x arm64"
@@ -30,7 +30,8 @@ RUN apt-get install -y --no-install-recommends devscripts equivs git curl wget &
 WORKDIR /source/
 
 # Get the source from github
-RUN wget https://github.com/PowerDNS/pdns/archive/refs/tags/${VERSION}.tar.gz && tar xvf ${VERSION}.tar.gz && mv pdns-${VERSION}/* . && rm ${VERSION}.tar.gz 
+RUN wget https://github.com/PowerDNS/pdns/archive/refs/tags/${VERSION}.tar.gz && \
+    tar xvf ${VERSION}.tar.gz && mv pdns-${VERSION}/* . && rm ${VERSION}.tar.gz 
 
 # TODO: control file is not in tarballs at all right now
 RUN mk-build-deps -i -t 'apt-get -y -o Debug::pkgProblemResolver=yes --no-install-recommends' /source/builder-support/debian/recursor/debian-buster/control && \
@@ -46,9 +47,6 @@ ENV MAKEFLAGS ${MAKEFLAGS:--j2}
 
 ARG DOCKER_FAKE_RELEASE=NO
 ENV DOCKER_FAKE_RELEASE ${DOCKER_FAKE_RELEASE}
-
-# Manpage deps
-# RUN apt-get install -y python3-venv && apt-get clean
 
 # Manpage prevent
 RUN touch pdns_recursor.1 rec_control.1 # avoid installing pandoc
@@ -76,7 +74,7 @@ RUN cd /tmp && mkdir /build/tmp/ && mkdir debian && \
     dpkg-deb -I equivs-dummy_1.0_all.deb && cp equivs-dummy_1.0_all.deb /build/tmp/
 
 # Runtime
-FROM debian:stable-slim
+FROM docker.io/debian:stable-slim
 
 # Reusable layer for base update - Should be cached from builder
 RUN apt-get update && apt-get -y dist-upgrade && apt-get clean

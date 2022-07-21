@@ -48,7 +48,7 @@ jobs:
         image: ghcr.io/fire833/pdns-auth
         tags: ${{ env.VERSION }}
         containerfiles: |
-          dockerfiles/pdns-auth/Dockerfile
+          dockerfiles/powerdns-auth/Dockerfile
         build-args: |
           VERSION=${{ env.VERSION }}
 

@@ -48,7 +48,7 @@ jobs:
         image: ghcr.io/fire833/pdns-resolve
         tags: ${{ env.VERSION }}
         containerfiles: |
-          dockerfiles/pdns-resolve/Dockerfile
+          dockerfiles/powerdns-resolve/Dockerfile
         build-args: |
           VERSION=${{ env.VERSION }}
 

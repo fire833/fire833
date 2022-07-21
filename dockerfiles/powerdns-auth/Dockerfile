@@ -15,7 +15,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-FROM debian:10-slim AS builder
+FROM docker.io/debian:10-slim AS builder
 
 ARG VERSION=
 ENV NO_LUA_JIT="s390x arm64"
@@ -24,12 +24,13 @@ ENV NO_LUA_JIT="s390x arm64"
 RUN apt-get update && apt-get -y dist-upgrade && apt-get clean
 
 # devscripts gives us mk-build-deps (and a lot of other stuff)
-RUN apt-get update && apt-get -y dist-upgrade && apt-get install -y --no-install-recommends devscripts dpkg-dev equivs git python3-venv wget && apt-get clean
+RUN apt-get install -y --no-install-recommends devscripts dpkg-dev equivs git wget && apt-get clean
 
 WORKDIR /source/
 
 # Get the source from github
-RUN wget https://github.com/PowerDNS/pdns/archive/refs/tags/${VERSION}.tar.gz && tar xvf ${VERSION}.tar.gz && mv pdns-${VERSION}/* . && rm ${VERSION}.tar.gz 
+RUN wget https://github.com/PowerDNS/pdns/archive/refs/tags/${VERSION}.tar.gz && \
+    tar xvf ${VERSION}.tar.gz && mv pdns-${VERSION}/* . && rm ${VERSION}.tar.gz 
 
 # TODO: control file is not in tarballs at all right now
 RUN mk-build-deps -i -t 'apt-get -y -o Debug::pkgProblemResolver=yes --no-install-recommends' builder-support/debian/authoritative/debian-buster/control && \
@@ -55,7 +56,7 @@ RUN mkdir /build && \
       --with-lua=${LUAVER} \
       --sysconfdir=/etc/powerdns \
       --enable-option-checking=fatal \
-      --with-dynmodules='bind geoip gmysql ldap lmdb lua2 pipe remote tinydns' \
+      --with-dynmodules='geoip gmysql lmdb lua2 remote tinydns' \
       --enable-tools \
       --enable-ixfrdist \
       --with-unixodbc-lib=/usr/lib/$(dpkg-architecture -q DEB_BUILD_GNU_TYPE) && \
@@ -72,7 +73,7 @@ RUN cd /tmp && mkdir /build/tmp/ && mkdir debian && \
     dpkg-deb -I equivs-dummy_1.0_all.deb && cp equivs-dummy_1.0_all.deb /build/tmp/
 
 # Runtime
-FROM debian:stable-slim
+FROM docker.io/debian:stable-slim
 
 # Reusable layer for base update - Should be cached from builder
 RUN apt-get update && apt-get -y dist-upgrade && apt-get clean
