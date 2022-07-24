@@ -24,8 +24,8 @@ on:
     - "*"
 
   # Build every sunday at midnight
-  schedule:
-    - cron: '0 0 * * 1'
+#   schedule:
+#     - cron: '0 0 * * 1'
 
 jobs:
   build-push:

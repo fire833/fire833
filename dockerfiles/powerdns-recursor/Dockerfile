@@ -15,99 +15,17 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-# Builder
-FROM docker.io/debian:10-slim AS builder
+FROM docker.io/debian:stable-slim AS builder
 
-ARG VERSION=
-ENV NO_LUA_JIT="s390x arm64"
+# Get dumb-init in image
+RUN apt-get update -y && apt-get install -y wget
+RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64
+RUN chmod +x /usr/local/bin/dumb-init
 
-# Reusable layer for base update
-RUN apt-get update && apt-get -y dist-upgrade && apt-get clean
-
-# devscripts gives us mk-build-deps (and a lot of other stuff)
-RUN apt-get install -y --no-install-recommends devscripts equivs git curl wget && apt-get clean
-
-WORKDIR /source/
-
-# Get the source from github
-RUN wget https://github.com/PowerDNS/pdns/archive/refs/tags/${VERSION}.tar.gz && \
-    tar xvf ${VERSION}.tar.gz && mv pdns-${VERSION}/* . && rm ${VERSION}.tar.gz 
-
-# TODO: control file is not in tarballs at all right now
-RUN mk-build-deps -i -t 'apt-get -y -o Debug::pkgProblemResolver=yes --no-install-recommends' /source/builder-support/debian/recursor/debian-buster/control && \
-    apt-get clean
-
-RUN cp builder/helpers/set-configure-ac-version.sh /usr/local/bin
-
-# build and install (TODO: before we hit this line, rearrange /source structure if we are coming from a tarball)
-WORKDIR /source/pdns/recursordist
-
-ARG MAKEFLAGS=
-ENV MAKEFLAGS ${MAKEFLAGS:--j2}
-
-ARG DOCKER_FAKE_RELEASE=NO
-ENV DOCKER_FAKE_RELEASE ${DOCKER_FAKE_RELEASE}
-
-# Manpage prevent
-RUN touch pdns_recursor.1 rec_control.1 # avoid installing pandoc
-
-RUN if [ "${DOCKER_FAKE_RELEASE}" = "YES" ]; then \
-      BUILDER_VERSION="$(IS_RELEASE=YES BUILDER_MODULES=recursor ./builder-support/gen-version | sed 's/\([0-9]\+\.[0-9]\+\.[0-9]\+\(\(alpha|beta|rc\)\d\+\)\)?.*/\1/')" set-configure-ac-version.sh;\
-    fi && \
-    BUILDER_MODULES=recursor autoreconf -vfi
-
-RUN mkdir /build && \
-    LUAVER=$([ -z "${NO_LUA_JIT##*$(dpkg --print-architecture)*}" ] && echo 'lua5.3' || echo 'luajit') && \
-    ./configure \
-      --with-lua=${LUAVER} \
-      LDFLAGS=-rdynamic \
-      --sysconfdir=/etc/powerdns \
-      --enable-option-checking=fatal && \
-      make clean && \
-      make $MAKEFLAGS install DESTDIR=/build && make clean && \
-      strip /build/usr/local/bin/* /build/usr/local/sbin/*
-RUN cd /tmp && mkdir /build/tmp/ && mkdir debian && \
-    echo 'Source: docker-deps-for-pdns' > debian/control && \
-    dpkg-shlibdeps /build/usr/local/bin/rec_control /build/usr/local/sbin/pdns_recursor && \
-    sed 's/^shlibs:Depends=/Depends: /' debian/substvars >> debian/control && \
-    equivs-build debian/control && \
-    dpkg-deb -I equivs-dummy_1.0_all.deb && cp equivs-dummy_1.0_all.deb /build/tmp/
-
-# Runtime
 FROM docker.io/debian:stable-slim
 
-# Reusable layer for base update - Should be cached from builder
-RUN apt-get update && apt-get -y dist-upgrade && apt-get clean
+COPY --from=builder /usr/local/bin/dumb-init /usr/local/bin/dumb-init
 
-# Ensure python3 and jinja2 is present (for startup script), and tini for signal management
-RUN apt-get install -y python3 python3-jinja2 tini libcap2-bin && apt-get clean
+RUN apt-get update -y && apt-get upgrade -y && apt-get install pdns-recursor -y
 
-# Executables from builder
-COPY --from=builder /build /
-RUN chmod 1777 /tmp # FIXME: better not use /build/tmp for equivs at all
-
-# Ensure dependencies are present
-RUN apt-get install -y /tmp/equivs-dummy_1.0_all.deb && apt-get clean
-
-# Start script
-COPY dockerdata/startup.py /usr/local/sbin/pdns_recursor-startup
-
-# Config file(s) from builder
-COPY dockerdata/recursor.conf /etc/powerdns/
-
-# Is recursor.d necessary if we copy the config into recursor.conf? (see above)
-RUN mkdir -p /etc/powerdns/recursor.d /var/run/pdns-recursor /etc/powerdns/templates.d
-
-# Work with pdns user - not root
-RUN adduser --system --disabled-password --disabled-login --no-create-home --group pdns --uid 953
-RUN chown pdns:pdns /var/run/pdns-recursor /etc/powerdns/recursor.d /etc/powerdns/templates.d
-USER pdns
-
-# Default DNS ports
-EXPOSE 53/udp
-EXPOSE 53/tcp
-
-# Default webserver port
-EXPOSE 8082/tcp
-
-ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/sbin/pdns_recursor-startup"]
+ENTRYPOINT [ "dumb-init", "pdns_recursor" ]

@@ -15,12 +15,19 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-FROM docker.io/alpine:latest AS builder
+FROM docker.io/debian:stable-slim AS builder
 
-ARG VERSION
+# Get dumb-init in image
+RUN apt-get update -y && apt-get install -y wget
+RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64
+RUN chmod +x /usr/local/bin/dumb-init
 
-# Reusable layer for base update
-RUN apt-get update && apt-get -y dist-upgrade && apt-get clean
+FROM docker.io/debian:stable-slim
 
-# devscripts gives us mk-build-deps (and a lot of other stuff)
-RUN apt-get update && apt-get -y dist-upgrade && apt-get install -y  --no-install-recommends devscripts dpkg-dev equivs git python3-venv && apt-get clean
+COPY --from=builder /usr/local/bin/dumb-init /usr/local/bin/dumb-init
+
+RUN apt-get update -y && apt-get upgrade -y && apt-get install freeradius -y
+
+USER freerad:freerad
+
+ENTRYPOINT [ "dumb-init", "freeradius", "-f" ]

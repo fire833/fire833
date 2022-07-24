@@ -24,8 +24,8 @@ on:
     - "*"
 
   # Build every sunday at midnight
-  schedule:
-    - cron: '0 0 * * 1'
+#   schedule:
+#     - cron: '0 0 * * 1'
 
 jobs:
   build-push:
@@ -45,17 +45,17 @@ jobs:
     - name: Build image
       uses: redhat-actions/buildah-build@v2.10
       with:
-        image: ghcr.io/fire833/pdns-resolve
+        image: ghcr.io/fire833/pdns-recursor
         tags: ${{ env.VERSION }}
         containerfiles: |
-          dockerfiles/powerdns-resolve/Dockerfile
+          dockerfiles/powerdns-recursor/Dockerfile
         build-args: |
           VERSION=${{ env.VERSION }}
 
     - name: Push image
       uses: redhat-actions/push-to-registry@v2.6
       with:
-        image: ghcr.io/fire833/pdns-resolve
+        image: ghcr.io/fire833/pdns-recursor
         tags: ${{ env.VERSION }}
         registry: ghcr.io
         username: ${{ github.repository_owner }}
