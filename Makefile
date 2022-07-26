@@ -21,19 +21,24 @@ BUILDAH         =       $(shell which buildah)
 .PHONY: pdns-auth
 pdns-auth:
 	@echo "Building PDNS Auth image..."
-	${BUILDAH} bud --build-arg VERSION=$(shell cat dockerfiles/powerdns-auth/Version) dockerfiles/powerdns-auth/Dockerfile
+	${BUILDAH} bud --build-arg VERSION=$(shell cat dockerfiles/powerdns-auth/Version | head -1) dockerfiles/powerdns-auth/Dockerfile
 
 .PHONY: pdns-recursor
 pdns-recursor:
 	@echo "Building PDNS Recursor image..."
-	${BUILDAH} bud --build-arg VERSION=$(shell cat dockerfiles/powerdns-recursor/Version) dockerfiles/powerdns-recursor/Dockerfile
+	${BUILDAH} bud --build-arg VERSION=$(shell cat dockerfiles/powerdns-recursor/Version | head -1) dockerfiles/powerdns-recursor/Dockerfile
 
 .PHONY: openvpn
 openvpn:
 	@echo "Building OpenVPN image..."
-	${BUILDAH} bud --build-arg VERSION=$(shell cat dockerfiles/openvpn/Version) dockerfiles/openvpn/Dockerfile
+	${BUILDAH} bud --build-arg VERSION=$(shell cat dockerfiles/openvpn/Version | head -1) dockerfiles/openvpn/Dockerfile
 
 .PHONY: freeradius
 freeradius:
 	@echo "Building FreeRADIUS image..."
-	${BUILDAH} bud --build-arg VERSION=$(shell cat dockerfiles/freeradius/Version) dockerfiles/freeradius/Dockerfile
+	${BUILDAH} bud --build-arg VERSION=$(shell cat dockerfiles/freeradius/Version | head -1) dockerfiles/freeradius/Dockerfile
+
+.PHONY: zerotier
+zerotier:
+	@echo "Building ZeroTier image..."
+	${BUILDAH} bud --build-arg VERSION=$(shell cat dockerfiles/zerotier/Version | head -1) dockerfiles/zerotier/Dockerfile

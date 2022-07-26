@@ -42,21 +42,25 @@ jobs:
     #     username: ${{ github.repository_owner }}
     #     password: ${{ secrets.GHCRPAT }}
 
+    - name: Get Version
+      id: get_version
+      run: echo "::set-output name=version::$(cat dockerfiles/openvpn/Version | head -1)"
+
     - name: Build image
       uses: redhat-actions/buildah-build@v2.10
       with:
         image: ghcr.io/fire833/openvpn
-        tags: ${{ env.VERSION }}
+        tags: ${{ steps.get_version.outputs.version }}
         containerfiles: |
           dockerfiles/openvpn/Dockerfile
         build-args: |
-          VERSION=${{ env.VERSION }}
+          VERSION=${{ steps.get_version.outputs.version }}
 
     - name: Push image
       uses: redhat-actions/push-to-registry@v2.6
       with:
         image: ghcr.io/fire833/openvpn
-        tags: ${{ env.VERSION }}
+        tags: ${{ steps.get_version.outputs.version }}
         registry: ghcr.io
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GHCRPAT }}
