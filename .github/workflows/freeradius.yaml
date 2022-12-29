@@ -57,7 +57,7 @@ jobs:
           VERSION=${{ steps.get_version.outputs.version }}
 
     - name: Push image
-      uses: redhat-actions/push-to-registry@v2.6
+      uses: redhat-actions/push-to-registry@v2.7
       with:
         image: ghcr.io/fire833/freeradius
         tags: ${{ steps.get_version.outputs.version }}
