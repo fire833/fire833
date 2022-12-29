@@ -47,7 +47,7 @@ jobs:
       run: echo "::set-output name=version::$(cat dockerfiles/openvpn/Version | head -1)"
 
     - name: Build image
-      uses: redhat-actions/buildah-build@v2.10
+      uses: redhat-actions/buildah-build@v2.11
       with:
         image: ghcr.io/fire833/openvpn
         tags: ${{ steps.get_version.outputs.version }}
