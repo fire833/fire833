@@ -47,7 +47,7 @@ jobs:
       run: echo "::set-output name=version::$(cat dockerfiles/zerotier/Version | head -1)"
 
     - name: Build image
-      uses: redhat-actions/buildah-build@v2.10
+      uses: redhat-actions/buildah-build@v2.12
       with:
         image: ghcr.io/fire833/zerotier
         tags: ${{ steps.get_version.outputs.version }}
