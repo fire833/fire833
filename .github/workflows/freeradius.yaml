@@ -50,7 +50,7 @@ jobs:
       uses: redhat-actions/buildah-build@v2.10
       with:
         image: ghcr.io/fire833/freeradius
-        tags: ${{ steps.get_version.outputs.version }}
+        tags: ${{ steps.get_version.outputs.version }} latest
         containerfiles: |
           dockerfiles/freeradius/Dockerfile
         build-args: |
@@ -60,7 +60,7 @@ jobs:
       uses: redhat-actions/push-to-registry@v2.6
       with:
         image: ghcr.io/fire833/freeradius
-        tags: ${{ steps.get_version.outputs.version }}
+        tags: ${{ steps.get_version.outputs.version }} latest
         registry: ghcr.io
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GHCRPAT }}
