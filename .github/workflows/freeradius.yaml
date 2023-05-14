@@ -47,7 +47,7 @@ jobs:
       run: echo "::set-output name=version::$(cat dockerfiles/freeradius/Version | head -1)"
 
     - name: Build image
-      uses: redhat-actions/buildah-build@v2.10
+      uses: redhat-actions/buildah-build@v2.12
       with:
         image: ghcr.io/fire833/freeradius
         tags: ${{ steps.get_version.outputs.version }} latest
@@ -57,7 +57,7 @@ jobs:
           VERSION=${{ steps.get_version.outputs.version }}
 
     - name: Push image
-      uses: redhat-actions/push-to-registry@v2.6
+      uses: redhat-actions/push-to-registry@v2.7
       with:
         image: ghcr.io/fire833/freeradius
         tags: ${{ steps.get_version.outputs.version }} latest
