@@ -27,8 +27,8 @@ on:
 #     - cron: '0 0 * * 1'
 
 permissions:
-  contents: read
   packages: write
+  contents: read
 
 jobs:
   build-push:
