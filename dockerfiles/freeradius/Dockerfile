@@ -32,6 +32,6 @@ USER freerad:freerad
 
 LABEL org.opencontainers.image.author="Kendall Tauser"
 LABEL org.opencontainers.image.title="FreeRADIUS Server"
-LABEL org.opencontainers.image.source https://github.com/fire833/fire833
+LABEL org.opencontainers.image.source="https://github.com/fire833/fire833"
 
 ENTRYPOINT [ "dumb-init", "freeradius", "-f" ]

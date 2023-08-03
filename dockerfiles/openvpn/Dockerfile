@@ -30,6 +30,6 @@ RUN apt-get update -y && apt-get upgrade -y && apt-get install openvpn -y
 
 LABEL org.opencontainers.image.author="Kendall Tauser"
 LABEL org.opencontainers.image.title="OpenVPN VPN Daemon"
-LABEL org.opencontainers.image.source https://github.com/fire833/fire833
+LABEL org.opencontainers.image.source="https://github.com/fire833/fire833"
 
 ENTRYPOINT [ "dumb-init", "openvpn", "--mode", "server" ]

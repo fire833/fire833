@@ -15,23 +15,30 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-FROM docker.io/debian:stable-slim AS builder
+FROM docker.io/ubuntu:latest AS builder
 
 # Get dumb-init in image
-RUN apt-get update -y && apt-get install -y wget
+RUN apt-get update -y && apt-get install -y git wget cmake g++ gcc libasound2-dev libudev-dev
 RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64
 RUN chmod +x /usr/local/bin/dumb-init
 
-FROM docker.io/debian:stable-slim
+WORKDIR /usr/src
+
+RUN git clone https://github.com/wb2osz/direwolf.git
+
+WORKDIR /usr/src/direwolf
+
+RUN mkdir build && cd build && cmake .. && make
+
+FROM docker.io/ubuntu:latest
+
+RUN apt-get update -y && apt-get install -y libasound2-dev
 
 COPY --from=builder /usr/local/bin/dumb-init /usr/local/bin/dumb-init
-
-RUN apt-get update -y && apt-get upgrade -y && apt-get install pdns-recursor -y
-
-USER pdns:pdns
+COPY --from=builder /usr/src/direwolf/build/src/direwolf /usr/local/bin/direwolf
 
 LABEL org.opencontainers.image.author="Kendall Tauser"
-LABEL org.opencontainers.image.title="PowerDNS Recursor"
+LABEL org.opencontainers.image.title="Direwolf - Software TNC"
 LABEL org.opencontainers.image.source="https://github.com/fire833/fire833"
 
-ENTRYPOINT [ "dumb-init", "pdns_recursor" ]
+ENTRYPOINT [ "dumb-init", "direwolf" ]

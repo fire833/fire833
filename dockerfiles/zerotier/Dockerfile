@@ -44,7 +44,7 @@ COPY --from=builder /usr/sbin/zerotier-one /usr/sbin/zerotier-one
 
 LABEL org.opencontainers.image.author="Kendall Tauser"
 LABEL org.opencontainers.image.title="ZeroTier One in a container"
-LABEL org.opencontainers.image.source https://github.com/fire833/fire833
+LABEL org.opencontainers.image.source="https://github.com/fire833/fire833"
 
 # COPY --from=builder /var/lib/zerotier-one/main.sh /main.sh
 # RUN chmod 0755 /main.sh
