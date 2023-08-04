@@ -77,6 +77,15 @@ jobs:
       VERSION: v0.1.0
       DOCKERFILE_PATH: dockerfiles/powerdns-recursor/Dockerfile
 
+  velocity:
+    uses: fire833/cicd-templates/.github/workflows/containers_cd_v1.yaml@main
+    if: "inputs.ONLY == 'velocity' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/velocity/'))"
+    with:
+      APP_NAME: velocity
+      VERSION: v0.1.0
+      DOCKERFILE_PATH: dockerfiles/velocity/Dockerfile
+      DOCKERFILE_CONTEXT: dockerfiles/velocity
+
   zerotier:
     uses: fire833/cicd-templates/.github/workflows/containers_cd_v1.yaml@main
     if: "inputs.ONLY == 'zerotier' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/zerotier/'))"
