@@ -86,6 +86,14 @@ jobs:
       DOCKERFILE_PATH: dockerfiles/velocity/Dockerfile
       DOCKERFILE_CONTEXT: dockerfiles/velocity
 
+  zeronsd:
+    uses: fire833/cicd-templates/.github/workflows/containers_cd_v1.yaml@main
+    if: "inputs.ONLY == 'zeronsd' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/zeronsd/'))"
+    with:
+      APP_NAME: zeronsd
+      VERSION: v0.1.0
+      DOCKERFILE_PATH: dockerfiles/zeronsd/Dockerfile
+
   zerotier:
     uses: fire833/cicd-templates/.github/workflows/containers_cd_v1.yaml@main
     if: "inputs.ONLY == 'zerotier' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/zerotier/'))"
