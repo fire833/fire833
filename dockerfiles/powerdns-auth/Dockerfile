@@ -26,7 +26,7 @@ FROM docker.io/debian:stable-slim
 
 COPY --from=builder /usr/local/bin/dumb-init /usr/local/bin/dumb-init
 
-RUN apt-get update -y && apt-get upgrade -y && apt-get install pdns-server pdns-backend-mysql -y
+RUN apt-get update -y && apt-get upgrade -y && apt-get install pdns-server pdns-backend-pgsql pdns-backend-sqlite3 -y
 
 USER pdns:pdns
 
