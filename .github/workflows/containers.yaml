@@ -77,6 +77,14 @@ jobs:
       VERSION: v0.1.0
       DOCKERFILE_PATH: dockerfiles/powerdns-recursor/Dockerfile
 
+  terraria-server:
+    uses: fire833/cicd-templates/.github/workflows/containers_cd_v1.yaml@main
+    if: "inputs.ONLY == 'terraria-server' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/terraria-server/'))"
+    with:
+      APP_NAME: terraria-server
+      VERSION: v0.1.0
+      DOCKERFILE_PATH: dockerfiles/terraria-server/Dockerfile
+
   velocity:
     uses: fire833/cicd-templates/.github/workflows/containers_cd_v1.yaml@main
     if: "inputs.ONLY == 'velocity' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/velocity/'))"
