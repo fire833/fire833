@@ -85,6 +85,14 @@ jobs:
       VERSION: v0.1.0
       DOCKERFILE_PATH: dockerfiles/terraria-server/Dockerfile
 
+  tor:
+    uses: fire833/cicd-templates/.github/workflows/containers_cd_v1.yaml@main
+    if: "inputs.ONLY == 'tor' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/tor/'))"
+    with:
+      APP_NAME: tor
+      VERSION: v0.1.0
+      DOCKERFILE_PATH: dockerfiles/tor/Dockerfile
+
   velocity:
     uses: fire833/cicd-templates/.github/workflows/containers_cd_v1.yaml@main
     if: "inputs.ONLY == 'velocity' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/velocity/'))"
