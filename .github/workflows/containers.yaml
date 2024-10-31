@@ -77,6 +77,14 @@ jobs:
       VERSION: v0.2.0
       DOCKERFILE_PATH: dockerfiles/powerdns-recursor/Dockerfile
 
+  soft-serve:
+    uses: fire833/cicd-templates/.github/workflows/containers_cd_v1.yaml@main
+    if: "inputs.ONLY == 'soft-serve' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/soft-serve/'))"
+    with:
+      APP_NAME: soft-serve
+      VERSION: v0.1.0
+      DOCKERFILE_PATH: dockerfiles/soft-serve/Dockerfile
+
   terraria-server:
     uses: fire833/cicd-templates/.github/workflows/containers_cd_v1.yaml@main
     if: "inputs.ONLY == 'terraria-server' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/terraria-server/'))"
