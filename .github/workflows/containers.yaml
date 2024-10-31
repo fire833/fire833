@@ -123,5 +123,5 @@ jobs:
     if: "inputs.ONLY == 'zerotier' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/zerotier/'))"
     with:
       APP_NAME: zerotier
-      VERSION: v0.2.0
+      VERSION: v0.2.1
       DOCKERFILE_PATH: dockerfiles/zerotier/Dockerfile

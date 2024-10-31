@@ -29,7 +29,7 @@ RUN apt-get update -y && apt-get install -y wget
 RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64
 RUN chmod +x /usr/local/bin/dumb-init
 
-FROM debian:stable-slim
+FROM docker.io/debian:stable-slim
 
 # LABEL version="1.8.6"
 
