@@ -53,6 +53,14 @@ jobs:
       VERSION: v0.1.0
       DOCKERFILE_PATH: dockerfiles/freeradius/Dockerfile
 
+  grafana:
+    uses: fire833/cicd-templates/.github/workflows/containers_cd_v1.yaml@main
+    if: "inputs.ONLY == 'grafana' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/grafana/'))"
+    with:
+      APP_NAME: grafana
+      VERSION: v0.1.0
+      DOCKERFILE_PATH: dockerfiles/grafana/Dockerfile
+
   openvpn:
     uses: fire833/cicd-templates/.github/workflows/containers_cd_v1.yaml@main
     if: "inputs.ONLY == 'openvpn' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/openvpn/'))"
@@ -82,7 +90,7 @@ jobs:
     if: "inputs.ONLY == 'soft-serve' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/soft-serve/'))"
     with:
       APP_NAME: soft-serve
-      VERSION: v0.1.0
+      VERSION: v0.1.1
       DOCKERFILE_PATH: dockerfiles/soft-serve/Dockerfile
 
   terraria-server:
