@@ -29,4 +29,8 @@ RUN apk update && apk add --update git bash openssh && rm -rf /var/cache/apk/*
 COPY --from=builder /go/bin/soft /usr/local/bin/soft
 COPY --from=builder /usr/local/bin/dumb-init /usr/bin/dumb-init
 
+LABEL org.opencontainers.image.author="Kendall Tauser"
+LABEL org.opencontainers.image.title="Soft serve git server"
+LABEL org.opencontainers.image.source="https://github.com/fire833/fire833"
+
 ENTRYPOINT [ "dumb-init", "soft", "serve" ]
