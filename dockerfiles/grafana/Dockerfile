@@ -17,7 +17,7 @@
 
 FROM docker.io/grafana/grafana:10.4.12
 
-COPY entrypoint.sh /entrypoint.sh
+COPY dockerfiles/grafana/entrypoint.sh /entrypoint.sh
 
 LABEL org.opencontainers.image.author="Kendall Tauser"
 LABEL org.opencontainers.image.title="Grafana Dashboard server"
