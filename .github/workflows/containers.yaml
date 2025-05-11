@@ -90,7 +90,7 @@ jobs:
     if: "inputs.ONLY == 'soft-serve' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/soft-serve/'))"
     with:
       APP_NAME: soft-serve
-      VERSION: v0.1.1
+      VERSION: v0.2.0
       DOCKERFILE_PATH: dockerfiles/soft-serve/Dockerfile
 
   terraria-server:

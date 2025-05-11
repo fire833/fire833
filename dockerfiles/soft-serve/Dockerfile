@@ -15,13 +15,13 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-FROM docker.io/golang:1.23.2-bookworm AS builder
+FROM docker.io/golang:1.24.3-bookworm AS builder
 
 # Get dumb-init in image
 RUN apt-get update -y && apt-get install -y wget
 RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64
 RUN chmod +x /usr/local/bin/dumb-init
-RUN CGO_ENABLED=0 go install github.com/charmbracelet/soft-serve/cmd/soft@eca5e328ab9674c5fa578778b981f8ae64b9bcd3
+RUN CGO_ENABLED=0 go install github.com/charmbracelet/soft-serve/cmd/soft@d299f527a73cac710f47192be5a21a1c4b72bdc3
 
 FROM docker.io/alpine:latest
 
