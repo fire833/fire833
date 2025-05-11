@@ -114,7 +114,7 @@ jobs:
     if: "inputs.ONLY == 'velocity' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/velocity/'))"
     with:
       APP_NAME: velocity
-      VERSION: v0.1.0
+      VERSION: v0.2.0
       DOCKERFILE_PATH: dockerfiles/velocity/Dockerfile
       DOCKERFILE_CONTEXT: dockerfiles/velocity
 

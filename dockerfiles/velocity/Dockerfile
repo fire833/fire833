@@ -23,7 +23,7 @@ RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/
 RUN chmod +x /usr/local/bin/dumb-init
 
 RUN mkdir -p /opt/bin
-RUN wget -O /opt/bin/velocity.jar https://api.papermc.io/v2/projects/velocity/versions/3.2.0-SNAPSHOT/builds/252/downloads/velocity-3.2.0-SNAPSHOT-252.jar
+RUN wget -O /opt/bin/velocity.jar https://api.papermc.io/v2/projects/velocity/versions/3.4.0-SNAPSHOT/builds/503/downloads/velocity-3.4.0-SNAPSHOT-503.jar
 
 FROM docker.io/openjdk:21-slim
 
