@@ -109,6 +109,14 @@ jobs:
       VERSION: v0.1.0
       DOCKERFILE_PATH: dockerfiles/tor/Dockerfile
 
+  unbound-exporter:
+    uses: fire833/cicd-templates/.github/workflows/containers_cd_v1.yaml@main
+    if: "inputs.ONLY == 'unbound-exporter' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/unbound-exporter/'))"
+    with:
+      APP_NAME: unbound-exporter
+      VERSION: v0.1.0
+      DOCKERFILE_PATH: dockerfiles/unbound-exporter/Dockerfile
+
   velocity:
     uses: fire833/cicd-templates/.github/workflows/containers_cd_v1.yaml@main
     if: "inputs.ONLY == 'velocity' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/velocity/'))"
