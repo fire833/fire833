@@ -37,6 +37,15 @@ on:
         type: string
 
 jobs:
+  debug:
+    uses: fire833/cicd-templates/.github/workflows/containers_cd_v1.yaml@main
+    if: "inputs.ONLY == 'debug' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/debug/'))"
+    with:
+      APP_NAME: debug
+      VERSION: v0.1.0
+      DOCKERFILE_PATH: dockerfiles/debug/Dockerfile
+      DOCKERFILE_CONTEXT: dockerfiles/debug/root
+
   direwolf:
     uses: fire833/cicd-templates/.github/workflows/containers_cd_v1.yaml@main
     if: "inputs.ONLY == 'direwolf' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/direwolf/'))"
