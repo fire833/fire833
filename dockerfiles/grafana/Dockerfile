@@ -15,7 +15,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-FROM docker.io/grafana/grafana:10.4.12
+FROM docker.io/grafana/grafana:12.0.4-ubuntu
 
 COPY dockerfiles/grafana/entrypoint.sh /entrypoint.sh
 
