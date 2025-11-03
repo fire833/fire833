@@ -51,8 +51,17 @@ jobs:
     if: "inputs.ONLY == 'direwolf' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/direwolf/'))"
     with:
       APP_NAME: direwolf
-      VERSION: v0.1.0
+      VERSION: v0.2.0
       DOCKERFILE_PATH: dockerfiles/direwolf/Dockerfile
+
+  fah:
+    uses: fire833/cicd-templates/.github/workflows/containers_cd_v1.yaml@main
+    if: "inputs.ONLY == 'fah' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/fah/'))"
+    with:
+      APP_NAME: fah
+      VERSION: v0.1.0
+      DOCKERFILE_PATH: dockerfiles/fah/Dockerfile
+      DOCKERFILE_CONTEXT: dockerfiles/fah
 
   freeradius:
     uses: fire833/cicd-templates/.github/workflows/containers_cd_v1.yaml@main
