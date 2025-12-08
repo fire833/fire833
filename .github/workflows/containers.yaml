@@ -54,6 +54,14 @@ jobs:
       VERSION: v0.2.0
       DOCKERFILE_PATH: dockerfiles/direwolf/Dockerfile
 
+  factorio-server:
+    uses: fire833/cicd-templates/.github/workflows/containers_cd_v1.yaml@main
+    if: "inputs.ONLY == 'factorio-server' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/factorio-server/'))"
+    with:
+      APP_NAME: factorio-server
+      VERSION: v0.1.0
+      DOCKERFILE_PATH: dockerfiles/factorio-server/Dockerfile
+
   fah:
     uses: fire833/cicd-templates/.github/workflows/containers_cd_v1.yaml@main
     if: "inputs.ONLY == 'fah' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/fah/'))"
