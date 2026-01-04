@@ -119,6 +119,14 @@ jobs:
       VERSION: v0.2.1
       DOCKERFILE_PATH: dockerfiles/soft-serve/Dockerfile
 
+  smartd:
+    uses: fire833/cicd-templates/.github/workflows/containers_cd_v1.yaml@main
+    if: "inputs.ONLY == 'smartd' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/smartd/'))"
+    with:
+      APP_NAME: smartd
+      VERSION: v0.1.0
+      DOCKERFILE_PATH: dockerfiles/smartd/Dockerfile
+
   terraria-server:
     uses: fire833/cicd-templates/.github/workflows/containers_cd_v1.yaml@main
     if: "inputs.ONLY == 'terraria-server' || (inputs.ONLY == '' && !contains(inputs.SKIP, '/terraria-server/'))"
