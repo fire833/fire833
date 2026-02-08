@@ -32,7 +32,7 @@ RUN mkdir build && cd build && cmake .. && make
 
 FROM docker.io/ubuntu:latest
 
-RUN apt-get update -y && apt-get install -y libasound2-dev && apt-get clean -y && apt-get autoclean -y && \ 
+RUN apt-get update -y && apt-get install -y libasound2-dev && apt-get clean -y && apt-get autoclean -y && \
     rm -rf /var/lib/apt/lists/* && apt-get autoremove -y
 
 COPY --from=builder /usr/local/bin/dumb-init /usr/local/bin/dumb-init

@@ -19,7 +19,7 @@ FROM docker.io/archlinux:latest AS builder
 
 WORKDIR /app
 
-RUN pacman -Sy --noconfirm arch-install-scripts fakeroot && \ 
+RUN pacman -Sy --noconfirm arch-install-scripts fakeroot && \
     fakeroot echo "Y\n" | pacstrap -K /app base ttf-jetbrains-mono nano vim
 
 FROM scratch

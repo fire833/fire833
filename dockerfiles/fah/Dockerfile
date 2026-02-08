@@ -23,8 +23,8 @@ RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/
 
 # Install stuff needed for FAHClient
 # To keep down the size of the image, clean out that cache when finished installing packages.
-RUN wget https://download.foldingathome.org/releases/public/fah-client/debian-10-64bit/release/fah-client_8.4.9_amd64.deb && \ 
-    dpkg -i --force-depends fah-client_8.4.9_amd64.deb && rm fah-client*.deb && apt-get clean -y && apt-get autoclean -y && \ 
+RUN wget https://download.foldingathome.org/releases/public/fah-client/debian-10-64bit/release/fah-client_8.4.9_amd64.deb && \
+    dpkg -i --force-depends fah-client_8.4.9_amd64.deb && rm fah-client*.deb && apt-get clean -y && apt-get autoclean -y && \
     rm -rf /var/lib/apt/lists/* && apt-get autoremove -y
 
 ENTRYPOINT [ "dumb-init", "/usr/bin/FAHClient" ]
