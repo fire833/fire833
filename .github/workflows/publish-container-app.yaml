@@ -1,0 +1,76 @@
+# Copyright (C) 2026 Kendall Tauser
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+name: Publish container application
+
+on:
+  workflow_dispatch:
+    inputs:
+      APP_NAME:
+        description: Specify the name of your application within the repo to run CI against.
+        default: ""
+        required: true
+        type: string
+      VERSION:
+        description: Specify the version of the container to push.
+        default: ""
+        required: true
+        type: string
+      DOCKERFILE_PATH:
+        description: Specify the path to the Dockerfile to build and publish.
+        default: Dockerfile
+        required: false
+        type: string
+      DOCKERFILE_CONTEXT:
+        description: Specify the context for the Dockerfile to build and publish.
+        default: .
+        required: false
+        type: string
+      RUNNER:
+        description: Specify the tag for the runners on which this workflow should run.
+        default: ubuntu-latest
+        required: false
+        type: string
+
+permissions:
+  packages: write
+  contents: read
+  actions: write
+
+jobs:
+  publish-app:
+    name: Publish container
+    uses: fire833/cicd-templates/.github/workflows/containers_cd_v1.yaml@main
+    with:
+      APP_NAME: ${{ inputs.APP_NAME }}
+      VERSION: ${{ inputs.VERSION }}
+      DOCKERFILE_PATH: ${{ inputs.DOCKERFILE_PATH }}
+      DOCKERFILE_CONTEXT: ${{ inputs.DOCKERFILE_CONTEXT }}
+      RUNNER: ${{ inputs.RUNNER }}
+
+  update-app-version:
+    name: Update app version
+    runs-on: ${{ inputs.RUNNER }}
+    needs: publish-app
+    steps:
+    - name: Clone repo
+      uses: actions/checkout@v6
+    - name: Get ktcicd binary
+      run: wget -O /usr/local/bin/ktcicd ${{ secrets.KTCICD_URL }} && chmod +x /usr/local/bin/ktcicd
+    - name: Open KTIAC PR
+      run: ktcicd gh call-workflow -o fire833 -r KTIAC -f main -w update-app -t GITHUB_PAT -i APP_NAME=${{ inputs.APP_NAME }} -i VERSION=${{ inputs.VERSION }} -i PROJECT=ktk8s -i STACK_NAME=prod
+      env:
+        GITHUB_PAT: ${{ secrets.KTIAC_UPDATE_PAT }}

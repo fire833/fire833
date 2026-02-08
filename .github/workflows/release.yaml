@@ -1,0 +1,46 @@
+# Copyright (C) 2026 Kendall Tauser
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+name: Run release
+
+on:
+  workflow_dispatch:
+    inputs:
+      RUNNER:
+        description: Specify the tag for the runners on which this workflow should run.
+        default: ubuntu-latest
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  release:
+    name: Run release
+    runs-on: ${{ inputs.RUNNER }}
+    steps:
+    - name: Clone repo
+      uses: actions/checkout@v6
+      with:
+        fetch-depth: 0 # Need entire commit history.
+    - name: Get ktcicd binary
+      run: wget -O /usr/local/bin/ktcicd ${{ secrets.KTCICD_URL }} && chmod +x /usr/local/bin/ktcicd
+    - name: Run release
+      run: ktcicd release-gh -v5 --skip-invalid-commits --skip-invalid-tags
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
