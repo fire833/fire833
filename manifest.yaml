@@ -2,148 +2,148 @@ containerWorkflowFile: publish-container-app.yaml
 gobinaryWorkflowFile: publish-gobin-app.yaml
 commitGroups: {}
 apps:
-  - name: direwolf
-    type: container
-    groups:
-      - radio
-    version: 0.2.0
-    skip: false
-    dockerfile-context: ""
-    dockerfile-path: dockerfiles/direwolf/Dockerfile
-    runner: ""
-  - name: factorio-server
-    type: container
-    groups:
-      - factorio
-    version: 0.1.0
-    skip: false
-    dockerfile-context: ""
-    dockerfile-path: dockerfiles/factorio-server/Dockerfile
-    runner: ""
-  - name: fah
-    type: container
-    groups:
-      - foldingathome
-    version: 0.1.0
-    skip: false
-    dockerfile-context: ""
-    dockerfile-path: dockerfiles/fah/Dockerfile
-    runner: ""
-  - name: freeradius
-    type: container
-    groups:
-      - radius
-    version: 0.1.0
-    skip: false
-    dockerfile-context: ""
-    dockerfile-path: dockerfiles/freeradius/Dockerfile
-    runner: ""
-  - name: grafana
-    type: container
-    groups:
-      - dash
-    version: 1.0.0
-    skip: false
-    dockerfile-context: ""
-    dockerfile-path: dockerfiles/grafana/Dockerfile
-    runner: ""
-  - name: openvpn
-    type: container
-    groups:
-      - vpn
-    version: 0.2.0
-    skip: false
-    dockerfile-context: ""
-    dockerfile-path: dockerfiles/openvpn/Dockerfile
-    runner: ""
-  - name: pdns-auth
-    type: container
-    groups:
-      - pdns
-    version: 0.3.0
-    skip: false
-    dockerfile-context: ""
-    dockerfile-path: dockerfiles/powerdns-auth/Dockerfile
-    runner: ""
-  - name: pdns-recursor
-    type: container
-    groups:
-      - pdns
-    version: 0.2.0
-    skip: false
-    dockerfile-context: ""
-    dockerfile-path: dockerfiles/powerdns-recursor/Dockerfile
-    runner: ""
-  - name: soft-serve
-    type: container
-    groups:
-      - git
-    version: 0.2.1
-    skip: false
-    dockerfile-context: ""
-    dockerfile-path: dockerfiles/soft-serve/Dockerfile
-    runner: ""
-  - name: smartd
-    type: container
-    groups:
-      - smart
-    version: 0.1.0
-    skip: false
-    dockerfile-context: ""
-    dockerfile-path: dockerfiles/smartd/Dockerfile
-    runner: ""
-  - name: terraria-server
-    type: container
-    groups:
-      - terraria
-    version: 0.1.0
-    skip: false
-    dockerfile-context: ""
-    dockerfile-path: dockerfiles/terraria-server/Dockerfile
-    runner: ""
-  - name: tor
-    type: container
-    groups:
-      - tor
-    version: 0.1.1
-    skip: false
-    dockerfile-context: ""
-    dockerfile-path: dockerfiles/tor/Dockerfile
-    runner: ""
-  - name: unbound-exporter
-    type: container
-    groups:
-      - unbound
-      - dns
-    version: 0.1.0
-    skip: false
-    dockerfile-context: ""
-    dockerfile-path: dockerfiles/unbound-exporter/Dockerfile
-    runner: ""
-  - name: velocity
-    type: container
-    groups:
-      - mcproxy
-    version: 0.2.0
-    skip: false
-    dockerfile-context: ""
-    dockerfile-path: dockerfiles/velocity/Dockerfile
-    runner: ""
-  - name: zeronsd
-    type: container
-    groups:
-      - dns
-    version: 0.1.0
-    skip: false
-    dockerfile-context: ""
-    dockerfile-path: dockerfiles/zeronsd/Dockerfile
-    runner: ""
-  - name: zerotier
-    type: container
-    groups:
-      - tor
-    version: 0.2.1
-    skip: false
-    dockerfile-context: ""
-    dockerfile-path: dockerfiles/zerotier/Dockerfile
-    runner: ""
+    - name: direwolf
+      type: container
+      groups:
+        - radio
+      version: 0.2.0
+      skip: false
+      dockerfile-context: ""
+      dockerfile-path: dockerfiles/direwolf/Dockerfile
+      runner: ""
+    - name: factorio-server
+      type: container
+      groups:
+        - factorio
+      version: 0.2.0
+      skip: false
+      dockerfile-context: ""
+      dockerfile-path: dockerfiles/factorio-server/Dockerfile
+      runner: ""
+    - name: fah
+      type: container
+      groups:
+        - foldingathome
+      version: 0.1.0
+      skip: false
+      dockerfile-context: ""
+      dockerfile-path: dockerfiles/fah/Dockerfile
+      runner: ""
+    - name: freeradius
+      type: container
+      groups:
+        - radius
+      version: 0.1.0
+      skip: false
+      dockerfile-context: ""
+      dockerfile-path: dockerfiles/freeradius/Dockerfile
+      runner: ""
+    - name: grafana
+      type: container
+      groups:
+        - dash
+      version: 1.0.0
+      skip: false
+      dockerfile-context: ""
+      dockerfile-path: dockerfiles/grafana/Dockerfile
+      runner: ""
+    - name: openvpn
+      type: container
+      groups:
+        - vpn
+      version: 0.2.0
+      skip: false
+      dockerfile-context: ""
+      dockerfile-path: dockerfiles/openvpn/Dockerfile
+      runner: ""
+    - name: pdns-auth
+      type: container
+      groups:
+        - pdns
+      version: 0.3.0
+      skip: false
+      dockerfile-context: ""
+      dockerfile-path: dockerfiles/powerdns-auth/Dockerfile
+      runner: ""
+    - name: pdns-recursor
+      type: container
+      groups:
+        - pdns
+      version: 0.2.0
+      skip: false
+      dockerfile-context: ""
+      dockerfile-path: dockerfiles/powerdns-recursor/Dockerfile
+      runner: ""
+    - name: soft-serve
+      type: container
+      groups:
+        - git
+      version: 0.2.1
+      skip: false
+      dockerfile-context: ""
+      dockerfile-path: dockerfiles/soft-serve/Dockerfile
+      runner: ""
+    - name: smartd
+      type: container
+      groups:
+        - smart
+      version: 0.1.0
+      skip: false
+      dockerfile-context: ""
+      dockerfile-path: dockerfiles/smartd/Dockerfile
+      runner: ""
+    - name: terraria-server
+      type: container
+      groups:
+        - terraria
+      version: 0.1.0
+      skip: false
+      dockerfile-context: ""
+      dockerfile-path: dockerfiles/terraria-server/Dockerfile
+      runner: ""
+    - name: tor
+      type: container
+      groups:
+        - tor
+      version: 0.1.1
+      skip: false
+      dockerfile-context: ""
+      dockerfile-path: dockerfiles/tor/Dockerfile
+      runner: ""
+    - name: unbound-exporter
+      type: container
+      groups:
+        - unbound
+        - dns
+      version: 0.1.0
+      skip: false
+      dockerfile-context: ""
+      dockerfile-path: dockerfiles/unbound-exporter/Dockerfile
+      runner: ""
+    - name: velocity
+      type: container
+      groups:
+        - mcproxy
+      version: 0.2.0
+      skip: false
+      dockerfile-context: ""
+      dockerfile-path: dockerfiles/velocity/Dockerfile
+      runner: ""
+    - name: zeronsd
+      type: container
+      groups:
+        - dns
+      version: 0.1.0
+      skip: false
+      dockerfile-context: ""
+      dockerfile-path: dockerfiles/zeronsd/Dockerfile
+      runner: ""
+    - name: zerotier
+      type: container
+      groups:
+        - tor
+      version: 0.2.1
+      skip: false
+      dockerfile-context: ""
+      dockerfile-path: dockerfiles/zerotier/Dockerfile
+      runner: ""
