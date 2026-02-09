@@ -96,7 +96,7 @@ apps:
       type: container
       groups:
         - terraria
-      version: 0.1.0
+      version: 0.2.0
       skip: false
       dockerfile-context: ""
       dockerfile-path: dockerfiles/terraria-server/Dockerfile
@@ -115,7 +115,7 @@ apps:
       groups:
         - unbound
         - dns
-      version: 0.1.0
+      version: 0.2.0
       skip: false
       dockerfile-context: ""
       dockerfile-path: dockerfiles/unbound-exporter/Dockerfile
