@@ -15,13 +15,13 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-FROM docker.io/archlinux:latest AS builder
+FROM docker.io/ubuntu:latest AS builder
 
 WORKDIR /app
 
-RUN pacman -Sy --noconfirm wget unzip && wget https://terraria.org/api/download/pc-dedicated-server/terraria-server-1449.zip && unzip terraria-server-1449.zip && chmod +x 1449/Linux/TerrariaServer.bin.x86_64 && wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64 && chmod +x /usr/local/bin/dumb-init
+RUN apt update && apt install -y wget unzip && wget https://terraria.org/api/download/pc-dedicated-server/terraria-server-1449.zip && unzip terraria-server-1449.zip && chmod +x 1449/Linux/TerrariaServer.bin.x86_64 && wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64 && chmod +x /usr/local/bin/dumb-init
 
-FROM docker.io/archlinux:latest
+FROM docker.io/ubuntu:latest
 
 WORKDIR /app
 
