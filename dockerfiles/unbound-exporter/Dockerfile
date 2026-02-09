@@ -20,7 +20,7 @@ FROM docker.io/golang:alpine AS builder
 # Get dumb-init in image
 RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64 && chmod +x /usr/local/bin/dumb-init
 
-RUN go install github.com/letsencrypt/unbound_exporter@3727f278bb8ef24842808ba7a814baaceff9e82d
+RUN go install github.com/letsencrypt/unbound_exporter@01314cb6b51ed429f3e583d26b41d37754483084
 
 FROM docker.io/alpine:latest
 
